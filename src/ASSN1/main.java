@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import java.util.*;
 		
 
 //read file
@@ -22,6 +23,7 @@ import java.io.*;
 public class main extends Application {
 
 			private static TextField stdname,mtcnum,cid,spvname;
+			private static Button buttonC1;
 			Button button1,button2,button3,buttonN,buttonP;
 			Scene scene1,scene2,scene3,scene4,scene5,scene6;
 			Label label1,label2,label3,label4;
@@ -47,12 +49,9 @@ public class main extends Application {
 			}
 			
 			
-//			public static void closeFile() {
-//				file.close();
-//			}
-			
 			public static void main(String[] args) {
 				openFile();
+				readFile();
 				launch(args);
 				//closeFile();
 			}
@@ -62,15 +61,35 @@ public class main extends Application {
 				
 					try {
 						
-						PrintWriter writeFile = new PrintWriter(file);
+						PrintWriter writeFile = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
 						
-						writeFile.print("\t"+ stdname.getText()+"\t"+mtcnum.getText()+"\t"+cid.getText()+"\t"+spvname.getText()+"\r\n");
+						writeFile.print(buttonC1.getText()+"\t"+ stdname.getText()+"\t"+mtcnum.getText()+"\t"+cid.getText()+
+								"\t"+spvname.getText()+"\r\n");
 						
 						writeFile.close();
 					}catch(Exception e){
 						e.printStackTrace();
 				}
 			}
+			
+			public static void readFile() {
+				
+				try {
+					Scanner sc = new Scanner(file);
+					
+					while(sc.hasNext()) {
+						String readLine = sc.nextLine();
+						
+						String[] splitted = readLine.split("\t");
+						
+						for(int i=0; i< splitted.length;i++)
+							System.out.println(splitted[i] + "-");
+					}
+				}catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
 			
 		
 			
@@ -117,10 +136,10 @@ public class main extends Application {
 					
 					for(int j = 1; j<=5; j++) {
 						
-						Button buttonC1=new Button( Integer.toString(1) + String.valueOf(x) + Integer.toString(j));
+						buttonC1=new Button( Integer.toString(1) + String.valueOf(x) + Integer.toString(j));
 						buttonC1.setMaxWidth(100);
 						//buttonC1.setOnAction(e ->primaryStage.setScene(scene2));
-						buttonC1.setOnAction(e -> System.out.println(buttonC1.getText()));
+						buttonC1.setOnAction(e -> AlertBox.display(buttonC1.getText()));
 						
 						GridPane.setConstraints(buttonC1,j+5,i+1);
 						
@@ -178,7 +197,6 @@ public class main extends Application {
 				Tab tab3 = new Tab("3-Data to Knowledge");
 				
 				layoutChooseTab.getTabs().add(tab3);
-				
 				
 				Scene sceneChoose = new Scene(layoutChooseTab,800,800);
 				
